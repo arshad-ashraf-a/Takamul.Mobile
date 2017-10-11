@@ -1,0 +1,97 @@
+<ion-header  [ngClass]='direction'>
+
+  <ion-navbar color="primary">
+    <ion-title>
+      {{ticketDetail.TicketName}}
+      <span class="statusname"> {{ticketDetail.TicketStatusName}}</span>
+    </ion-title> 
+    <!--<ion-buttons start>
+      <button ion-button (click)="dismiss(false)">
+        <span class="bg-primary" showWhen="ios">{{'cancel' | translate}}</span>
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+      </button>
+    </ion-buttons>-->
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <div id="scroll-top"> 
+    <div *ngIf="ticketDetail.TicketName" class="chatdiv mychat highlight" >
+      <div class="bubble text-center">
+        <!--<img   onerror="this.src='assets/images/dummy.jpg';"  *ngIf="ticketDetail.RemoteFilePath" [src]="ticketDetail.RemoteFilePath"/>        -->
+        <span class="name ">Ticket Description</span>
+          <span class="desc">{{ticketDetail.TicketDescription}}</span>
+        <!--<span class="datetime ">
+          Code:{{ticketDetail.TicketCode}}
+        </span>
+        <div class="status right" [ngClass]="{'closed':ticketDetail.TicketStatusID==2,'rejected':ticketDetail.TicketStatusID==3,'deleted':ticketDetail.TicketStatusID==4}"> <span>{{ticketDetail.TicketStatusID==1?'Open':(ticketDetail.TicketStatusID==2?'closed':(ticketDetail.TicketStatusID==3?'rejected':'Deleted'))}}</span></div>
+        <div class="clear"></div>-->
+      </div>
+    </div>
+    <template ngFor let-chat [ngForOf]="chatDetail" let-i="index">
+      <div class="chatdiv" [ngClass]="{'mychat':chat.UserID == auth.userId(),'copy-selected':chat.copySelected}">
+        <div class="bubble" (press)="showCopy(chat)" >
+          <span class="name">{{chat.UserFullName}}</span>
+          {{chat.ReplyMessage}}
+          <div class="chat-img"  *ngIf="chat.RemoteFilePath && (chat.TicketChatTypeName == 'jpg' || chat.TicketChatTypeName == 'png' || chat.TicketChatTypeName == 'jpeg')">
+            <img (click)="showChatImg = true;chatImg = chat.RemoteFilePath"  (load)="chat.opacity = 1" [ngStyle]="{'opacity':chat.opacity?chat.opacity:0}" onerror="this.src='assets/images/dummy.jpg';"  [src]="chat.RemoteFilePath"/>
+            
+            <div class="spinner"   *ngIf="chat.RemoteFilePath && !chat.opacity"   >
+              <div class="bounce1 red"></div>
+              <div class="bounce2 green"></div>
+              <div class="bounce3 blue"></div>
+              <div class="bounce4 yellow"></div>
+            </div>
+          </div>
+          <span class="datetime">
+            {{chat.ReplyDate}}
+          </span>
+        </div>
+      </div>
+    </template>
+    <!--<div class="no-chat" *ngIf="chatDetail.length <= 0 && !spinner">
+      <span>
+        {{'no_chats_to_show' | translate}}
+      </span>
+    </div>-->
+
+    
+  </div>
+<div class="spinner"   *ngIf="spinner"   >
+  <div class="bounce1 red"></div>
+  <div class="bounce2 green"></div>
+  <div class="bounce3 blue"></div>
+  <div class="bounce4 yellow"></div>
+</div>
+</ion-content>
+<div class="footer" >
+  <div class="inner" *ngIf="ticketDetail.TicketStatusID < 2">
+    <button class="attach" (click)="presentActionSheet()"> 
+      <!--<ion-icon name="attach"></ion-icon>-->
+        <img src="assets/icon/up-arrow.png" alt="">
+    </button>
+    <div class="textarea">
+    <textarea id="textarea"  [ngClass]='direction' (keyup)="autogrow()" [(ngModel)]="replyMsg" placeholder="{{'start_typing' | translate}}"></textarea>
+
+    </div>
+
+    <button class="reply" (click)="reply()">
+        <!--<ion-icon name="arrow-dropright-circle"></ion-icon>-->
+        <img src="assets/icon/send-button.png" alt="">
+    </button>
+  </div>
+  <div class="ticket-closed" *ngIf="ticketDetail.TicketStatusID == 2 || ticketDetail.TicketStatusID == 3 || ticketDetail.TicketStatusID == 4">
+    <span>
+      Ticket has been {{ticketDetail.TicketStatusName}}
+    </span>
+  </div>
+  <div class="show-chat-img" *ngIf="showChatImg">
+    <a class="close-btn" (click)="imgWidth = null;showChatImg = false;">
+      <ion-icon name="close"></ion-icon>
+    </a>
+    <a  (click)="dbclickCall();imgWidth = imgWidth == 'auto'?'100vw':'auto'">
+      <img  [ngStyle]="{'width':imgWidth?imgWidth:'100vw','max-height':imgWidth == 'auto'?'500%':'100%'}" [src]="chatImg?chatImg:''" alt="">
+    </a>
+  </div>
+</div>

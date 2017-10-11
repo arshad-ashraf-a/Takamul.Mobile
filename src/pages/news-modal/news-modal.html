@@ -1,0 +1,43 @@
+<ion-header  [ngClass]='direction'>
+
+  <ion-navbar color="primary">
+    <ion-title>{{ 'news_detail' | translate }}</ion-title> 
+    <ion-buttons start>
+            <button ion-button (click)="dismiss(false)">
+        <span class="bg-primary" showWhen="ios">{{ 'cancel' | translate }}</span>
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+      </button>
+        </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding  [ngClass]='direction'>
+    <div *ngIf="newsDetail" class="news-detail">
+      <div class="img">
+           <img *ngIf="newsDetail.RemoteFilePath"  (click)="showChatImg = true;chatImg = newsDetail.RemoteFilePath" [src]="newsDetail.RemoteFilePath"   onerror="this.src='assets/images/dummy.jpg';"/>
+      </div>
+      <h4>{{newsDetail.NewsTitle}}</h4>
+      <p>
+        {{newsDetail.NewsContent}}
+      </p>
+    </div>
+  <ion-fab right bottom *ngIf="newsDetail">
+    <button ion-fab color="success" (click)="share()" ><ion-icon name="share"></ion-icon></button>
+  </ion-fab>
+<div class="spinner"   *ngIf="spinner"   >
+  <div class="bounce1 red"></div>
+  <div class="bounce2 green"></div>
+  <div class="bounce3 blue"></div>
+  <div class="bounce4 yellow"></div>
+</div>
+</ion-content>
+
+  <div class="show-chat-img" *ngIf="showChatImg">
+    <a class="close-btn" (click)="imgWidth = null;showChatImg = false;">
+      <ion-icon name="close"></ion-icon>
+    </a>
+    <a  (click)="imgWidth = imgWidth == 'auto'?'100vw':'auto'">
+      <img  [ngStyle]="{'width':imgWidth?imgWidth:'100vw'}" [src]="chatImg?chatImg:''" alt="">
+    </a>
+  </div>

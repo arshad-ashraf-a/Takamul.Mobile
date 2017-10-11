@@ -1,0 +1,40 @@
+
+<ion-content padding>
+  <ion-refresher  (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-down"
+      pullingText="Pull to refresh">
+    </ion-refresher-content>
+  </ion-refresher>
+    <ion-list *ngFor="let news of newsList">
+      <div class="news">
+        <div class="right ntext" tappable (click)="showDetails(news.NewsID)">
+          <h4>{{news.NewsTitle}}</h4>
+          <span class="right datetime ">{{news.PublishedDate}}</span>
+        </div>
+        <div class="left nimg"> 
+           <img  (click)="showChatImg = true;chatImg = news.RemoteFilePath"  *ngIf="news.RemoteFilePath" [src]="news.RemoteFilePath"  onerror="this.src='assets/images/dummy.jpg';"/>
+           <img (click)="showChatImg = true;chatImg = news.RemoteFilePath"  *ngIf="!news.RemoteFilePath" [src]="'assets/images/dummy.jpg'"/>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </ion-list>
+    <div class="no-news" *ngIf="(newsList && newsList.length <= 0 || !newsList) && !spinner">
+      <img src="assets/icon/not-found.png" alt="">
+      <div>{{'no_news' | translate}}</div>
+    </div>
+<div class="spinner"   *ngIf="spinner"   >
+  <div class="bounce1 red"></div>
+  <div class="bounce2 green"></div>
+  <div class="bounce3 blue"></div>
+  <div class="bounce4 yellow"></div>
+</div>
+</ion-content>
+  <div class="show-chat-img" *ngIf="showChatImg">
+    <a class="close-btn" (click)="imgWidth = null;showChatImg = false;">
+      <ion-icon name="close"></ion-icon>
+    </a>
+    <a  (click)="imgWidth = imgWidth == 'auto'?'100vw':'auto'">
+      <img  [ngStyle]="{'width':imgWidth?imgWidth:'100vw'}" [src]="chatImg?chatImg:''" alt="">
+    </a>
+  </div>

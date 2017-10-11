@@ -1,0 +1,63 @@
+<!--
+  Generated template for the SettingPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>{{'settings' | translate}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content >
+   <ion-list>
+      <button ion-item (click)="profile()">
+        <ion-icon name="person" item-start></ion-icon>
+        {{'profile' | translate}}
+      </button>
+      <button ion-item (click)="about()">
+        <ion-icon name="information-circle" item-start></ion-icon>
+        {{'about' | translate}}
+      </button>
+      <button ion-item  (click)="howItWorks()">
+        <ion-icon name="aperture"  item-start></ion-icon>
+        {{'how_it_works' | translate}}
+      </button>
+      <button ion-item >
+        <ion-icon name="paper"  item-start></ion-icon>
+        {{'installation' | translate}}
+      </button>
+      <button ion-item (click)="help()">
+        <ion-icon name="bulb" item-start></ion-icon>
+        {{'help' | translate}}
+      </button>
+      <button ion-item (click)="terms()">
+        <ion-icon name="document" item-start></ion-icon>
+        {{'terms' | translate}}
+      </button>
+      <button ion-item  (click)="faq()">
+        <ion-icon name="help" item-start></ion-icon>
+        {{'faq' | translate}}
+      </button>
+      <button ion-item (click)="share()">
+        <ion-icon name="share" item-start></ion-icon>
+        {{'share' | translate}}
+      </button>
+      <ion-item>
+        <ion-icon name="settings" item-start></ion-icon>
+        <ion-label *ngIf="commonStorage.localGet('langId') == 1"> {{'english' | translate}}</ion-label>
+        <ion-label *ngIf="commonStorage.localGet('langId') != 1"> {{'arabic' | translate}}</ion-label>
+        <ion-toggle checked="false" [(ngModel)]="lang" (ionChange)="toggle(lang)"></ion-toggle>
+      </ion-item>
+      <button ion-item (click)="logout()">
+        <ion-icon name="log-out" item-start></ion-icon>
+        {{'logout' | translate}}
+      </button>
+    </ion-list>
+
+
+</ion-content>

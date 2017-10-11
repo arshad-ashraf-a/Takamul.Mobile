@@ -1,0 +1,37 @@
+page-admin {
+    .segment-md{
+        background-color: #e55b50;
+    }
+    .tab-content {
+        height: 100%;
+        padding: 10px;
+        padding-bottom: 50px;
+        background-color: #fff;
+    }
+    .no-news {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        img{
+             margin-bottom: 10px;
+        }
+    }
+    ion-content.bg-white {
+        .scroll-content{
+             background-color: #fff;
+            background-image: none;
+        }
+    }
+    .segment-button.segment-activated{
+        background-color: #c5534b;
+    }
+    .segment-md-secondary .segment-button.activated, .segment-md-secondary .segment-button.segment-activated {
+        border-color: #711812;
+    }
+    ion-segment.segment ion-segment-button.segment-button {
+        font-size: 1.4rem;
+    }
+
+}

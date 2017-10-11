@@ -1,0 +1,51 @@
+page-news-modal {
+    .content[padding] .scroll-content {
+        padding: 8px;
+        background-image: none;
+        background-color: #f7f7f7;
+    }
+    .news-detail{
+        padding: 5px;
+        background-color: #fff;
+        h4{
+            color: #333;
+            margin-bottom: 5px;
+        }
+        p {
+            margin: 5px 0;
+            color: #333;
+        }
+        .img{
+            img{
+                width: 100%;
+            }
+        }
+    }
+     .show-chat-img {
+        position: fixed;
+        z-index: 999;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #000;
+        a.close-btn {
+            /* width: 20px; */
+            /* height: 20px; */
+            color: #fff;
+            font-size: 3rem;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 99;
+        }
+        img{
+            background-color: #fff;
+            max-width: 400%;
+        }
+    }
+}

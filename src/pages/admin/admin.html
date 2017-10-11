@@ -1,0 +1,23 @@
+
+<ion-content [ngClass]="{'bg-white':(members && members.length <= 0 || !members)}">
+<ion-segment  *ngIf="members.length>0" [(ngModel)]="memberTab" color="secondary" (ionChange)="segmentChanged($event)">
+    <template ngFor let-member [ngForOf]="members" let-i="index">
+      <ion-segment-button   value="{{i}}">
+        {{member.MemberInfoTitle}}
+      </ion-segment-button>
+    </template>
+  </ion-segment>
+  <div class="tab-content" *ngIf="members.length>0">
+    {{members[memberTab].MemberInfoDesc}}
+  </div>
+    <div class="no-news" *ngIf="(members && members.length <= 0 || !members) && !spinner">
+      <img src="assets/icon/not-found.png" alt="">
+      <div>{{'no_data' | translate}}</div>
+    </div>
+<div class="spinner"   *ngIf="spinner"   >
+  <div class="bounce1 red"></div>
+  <div class="bounce2 green"></div>
+  <div class="bounce3 blue"></div>
+  <div class="bounce4 yellow"></div>
+</div>
+</ion-content>

@@ -1,0 +1,183 @@
+
+<ion-header *ngIf="fromPN" [ngClass]='direction'>
+
+  <ion-navbar color="primary">
+    <ion-title>{{ 'tickets' | translate }}</ion-title> 
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content [ngClass]="{'logged-in':auth.isLoggedIn()}" [ngClass]="{direction:fromPN}">
+  <ion-refresher *ngIf="auth.isLoggedIn()" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-down"
+      pullingText="Pull to refresh">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <div class="search" *ngIf="auth.isLoggedIn()">
+    <!--<ion-row>
+      <ion-col col-10>-->
+        <ion-searchbar *ngIf="!showTickets" class="search-bar show" 
+        [(ngModel)]="searchKey"
+        [showCancelButton]="true">
+        </ion-searchbar>
+      <!--</ion-col>-->
+      <!--<ion-col col-2>
+          <button ion-button    class="search-btn" (click)="showSearch = !showSearch" >
+              <ion-icon class="search-btn" name="search"></ion-icon>
+          </button>
+      </ion-col>-->
+    <!--</ion-row>-->
+  </div>
+  <h3 class="center text-white">
+    {{ 'tickets' | translate }}
+  </h3>
+
+
+  <div class="tickets-div" [ngClass]="{'tickets-div':!auth.isLoggedIn(),'tickets-div-new':auth.isLoggedIn(),'lower-and':device.version?device.version.substring(0,3) < 5.0:false}" #ticketsDiv   [ngClass]="{'add-new-hide':addNew,'logged-in':auth.isLoggedIn()}" >
+     <div class="signup" *ngIf="!auth.isLoggedIn() && ticketsDivHeight" >
+        <div class="signupform inputs"  *ngIf="!showOtp && !showOtpFirst && !showPhone && !spinner"  [formGroup]="signUpForm">
+
+            <h3>{{ 'register' | translate }}</h3>
+            <ion-item>
+                <ion-input formControlName="name"   placeholder="{{'name' | translate}}"  ></ion-input>
+            </ion-item>
+            <ion-item> 
+                <ion-input formControlName="phone"  placeholder="{{'phone' | translate}}"  (keyup)="signUpForm.controls['phone'].setValue(limitNumber(signUpForm.value.phone,8))"  ></ion-input>
+            </ion-item>
+            <!--<ion-item>
+                <ion-input formControlName="email" placeholder="{{'email' | translate}}"  ></ion-input>
+            </ion-item>-->
+            <ion-item>
+                <ion-input type="number" (keyup)="signUpForm.controls['civilId'].setValue(limitNumber(signUpForm.value.civilId,10))" formControlName="civilId" placeholder="{{ 'civil_id' | translate }}"  ></ion-input>
+            </ion-item>
+            <div class="select-div" [ngClass]="{'selected-item':signUpForm.value.area}">  
+              <span>{{signUpForm.value.area?signUpForm.value.area.AREA_NAME:"area_name" | translate}}</span>
+              <ion-icon  ios="mf-arrow-dropdown" md="md-arrow-dropdown"></ion-icon>
+              <ion-item>
+                <ion-label>{{'area_name' | translate}}</ion-label>
+                <ion-select [selectOptions]="selectOptionsArea" formControlName="area" (ionChange)="loadWilayat(signUpForm.value.area)">
+                  <!--<ion-option value="0" [selected]="true">Select</ion-option>-->
+                  <template ngFor let-ar [ngForOf]="area" let-i="index">
+                    <ion-option [value]="ar">{{ar.AREA_NAME}}</ion-option>
+                  </template>
+                </ion-select>
+                <!--<ion-input formControlName="area" placeholder="Area Name"  ></ion-input>-->
+              </ion-item>
+            </div>
+            <div class="select-div" [ngClass]="{'selected-item':signUpForm.value.wilayat}">  
+              <span>{{signUpForm.value.wilayat?signUpForm.value.wilayat.WILLAYATNAME:"wilayat_name" | translate}}</span>
+              <ion-icon  ios="mf-arrow-dropdown" md="md-arrow-dropdown"></ion-icon>
+              <ion-item>
+                  <ion-label>{{'wilayat_name' | translate}}</ion-label>
+                  <ion-select  [selectOptions]="selectOptionsWilayat"  formControlName="wilayat" (ionChange)="loadVillage(signUpForm.value.area,signUpForm.value.wilayat)">
+                    <template ngFor let-wl [ngForOf]="wilayat" let-i="index">
+                      <ion-option [value]="wl">{{wl.WILLAYATNAME}}</ion-option>
+                    </template>
+                  </ion-select>
+                  <!--<ion-input formControlName="wilayat" placeholder="Wilayat Name"  ></ion-input>-->
+              </ion-item>
+            </div>
+            <div class="select-div" [ngClass]="{'selected-item':signUpForm.value.village}">  
+              <span>{{signUpForm.value.village?signUpForm.value.village.VILLAGENAME:"village_name"}}</span>
+              <ion-icon  ios="mf-arrow-dropdown" md="md-arrow-dropdown"></ion-icon>
+              <ion-item>
+                  <ion-label>{{'village_name' | translate}}</ion-label>
+                  <ion-select  [selectOptions]="selectOptionsVlllage"  formControlName="village" >
+                    <template ngFor let-vl [ngForOf]="village" let-i="index">
+                      <ion-option [value]="vl">{{vl.VILLAGENAME}}</ion-option>
+                    </template>
+                  </ion-select>
+                  <!--<ion-input formControlName="village" placeholder="Village Name"  ></ion-input>-->
+              </ion-item>
+            </div>
+          <button ion-button  color="primary" (click)="signUp(signUpForm.value)"  [disabled]='!signUpForm.valid' round>
+            {{ 'signup' | translate }}
+          </button>
+        </div>
+        <!--<div class="otp"  *ngIf="showOtpFirst && !spinner"  [formGroup]="otpForm" >
+          <div class="otp-msg">
+            {{otpMsg}}
+          </div>
+          <ion-item>
+              <ion-input formControlName="otp" placeholder="Enter OTP" ></ion-input>
+          </ion-item>
+          <button ion-button  color="primary" (click)="otpValidate(otpForm.value)"  [disabled]='!otpForm.valid' round>
+              validate
+          </button>
+        </div>-->
+        <div [ngStyle]="{'min-height':ticketsDivHeight+'px'}" class="otp"  *ngIf="showOtp && !spinner"  [formGroup]="otpForm" >
+          <div class="otp-msg">
+            {{otpMsg}}
+          </div>
+          <ion-item>
+              <ion-input type="number" formControlName="otp" placeholder="{{ 'otp' | translate }}" ></ion-input>
+          </ion-item>
+          <button ion-button block color="primary" (click)="otpValidate(otpForm.value)"  [disabled]='!otpForm.valid' round>
+              {{ 'validate' | translate }}
+          </button>
+          <button ion-button block  color="primary" (click)="resendOtp(phoneForm.value.phone)"   round>
+              {{ 'resend_otp' | translate }}
+          </button>
+        </div>
+        <div [ngStyle]="{'height':ticketsDivHeight+'px'}" class="phone"  *ngIf="showPhone && !spinner"  [formGroup]="phoneForm" >
+          <h3>{{ 'verify_phone' | translate }}</h3>
+          <ion-item>
+              <ion-input type="number"  (keyup)="phoneForm.controls['phone'].setValue(limitNumber(phoneForm.value.phone,8))" formControlName="phone" placeholder="{{ 'phone' | translate }}" ></ion-input>
+          </ion-item>
+          <button ion-button  color="primary" (click)="getUserDetailByPhone(phoneForm.value)"  [disabled]='!phoneForm.valid' round>
+              {{ 'verify' | translate }}
+          </button>
+        </div>
+      </div>
+    <div class="tickets-list">
+     
+      <!--{{auth.isLoggedIn()}}-->
+      <div class="tickets-listing"  *ngIf="auth.isLoggedIn()">
+
+          <div class="tcket-list" >
+              <template ngFor let-ticket [ngForOf]="tickets  | filter: 'TicketName' : searchKey " let-i="index">
+                <div class="ticket-item">
+                  <div class="icon left" >           
+                    <img (click)="chatImageClick(i)"  class="chat-img" [ngClass]="{'show':ticket.imgShow}" *ngIf="ticket.RemoteFilePath" [src]="ticket.RemoteFilePath"   onerror="this.src='assets/images/dummy.jpg';"/>
+                    <img (click)="chatImageClick(i)"  class="chat-img" [ngClass]="{'show':ticket.imgShow}" *ngIf="!ticket.RemoteFilePath" tappable [src]="'assets/icon/language-icon.png'" alt="" >
+                  </div>
+                  <div class="detail left" tappable (click)="showChat(ticket.TicketID,ticket.TicketName)">
+                    <div class="title">{{ticket.TicketName}}</div>
+                    <div class="status" [ngClass]="{'closed':ticket.TicketStatusID==2,'rejected':ticket.TicketStatusID==3,'deleted':ticket.TicketStatusID==4}"> <span>{{ticket.TicketStatusID==1?'Open':(ticket.TicketStatusID==2?'closed':(ticket.TicketStatusID==3?'rejected':'Deleted'))}}</span></div>
+                    <!--<div class="date">{{ticket.TicketDescription}}</div>-->
+                  </div>
+                  <div class="right">
+                      <!--<ion-icon name="trash" color="danger"></ion-icon>-->
+                      <ion-icon class="fade" *ngIf="ticket.TicketStatusID==2" name="ios-checkmark-circle-outline"  color="success"  ></ion-icon>
+                      <ion-icon *ngIf="ticket.TicketStatusID!=2" name="ios-checkmark-circle-outline" tappable color="success" (click)="resolve(ticket.TicketID)"></ion-icon>
+                      <ion-icon name="ios-trash"  color="danger" (click)="delete(ticket.TicketID)"></ion-icon>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </template>
+          </div>
+      </div>
+    </div>
+  </div>
+  <!--<div class="ticket-add" *ngIf="auth.isLoggedIn()">
+    <span class="text">Tickets</span>
+    <button ion-button  color="primary" (click)="createTicket()" round class="right">
+      {{ 'add_new' | translate }}
+    </button>
+    <div class="clear"></div>
+  </div>-->
+  <ion-fab right bottom *ngIf="auth.isLoggedIn()">
+    <button ion-fab color="success" (click)="createTicket()" ><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+              <div class="no-tickets-found" *ngIf="showTickets">
+                <span>{{ 'no_tickets_found' | translate }}</span>
+              </div>
+<div class="spinner" *ngIf="spinner"   >
+  <div class="bounce1 red"></div>
+  <div class="bounce2 green"></div>
+  <div class="bounce3 blue"></div>
+  <div class="bounce4 yellow"></div>
+</div>
+</ion-content>

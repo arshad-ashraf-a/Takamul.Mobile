@@ -1,0 +1,200 @@
+page-chat-modal {
+    span.statusname {
+    display: block;
+    font-size: 1.3rem;
+    color: #eee;
+}
+    ion-content{
+        .scroll-content{
+            padding: 8px !important;
+            background-color: #e8e8e8;
+            background-image: none !important;
+            padding-bottom: 50px !important;
+            overflow-y: hidden;
+        } 
+    }
+    #scroll-top{
+        height: 100%;
+        max-height: 100%;
+        overflow-y: scroll;
+    }
+    .chatdiv {
+
+        &.copy-selected .bubble {
+            border: 3px solid #af0;
+        }
+        margin: 10px 0;
+        .bubble {
+            padding: 8px;
+            background-color: #fff;
+            border-radius: 6px 6px 6px 0px; 
+            margin-right: 30px;
+            margin-left: 0px;
+            .chat-img{
+                position: relative;
+                height: 200px;
+                overflow-y: hidden;
+            } 
+            span.name {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 1px;
+            }
+            span.datetime {
+                display: block;
+                color: #666;
+                font-size: 1.1rem;
+                left: 0;
+                text-align: right;
+                direction: ltr;
+            } 
+        }
+        &.mychat{
+            .bubble{
+                margin-left: 30px;
+                margin-right: 0px;
+                border-radius: 6px 6px 0px 6px; 
+            position: relative; 
+                
+            }
+            .status{
+                margin-top: 4px;
+                    span {
+                    display: inline-block;
+                    padding: 4px 5px;
+                    background: #4CAF50;
+                    border-radius: 3px;
+                    color: #fff;
+                    font-size: .7em;
+                    }
+            }
+            .status.deleted span {
+                background-color: #f00;
+            }
+            .status.closed span {
+                background-color: #f5a914;
+            }
+            .status.rejected span {
+                background-color: #e60dd4;
+            }
+        }
+    }
+    .chatdiv.mychat.highlight .bubble.text-center {
+        border-radius: 0;
+        margin: 0px 2px;
+        padding: 5px;
+        .name{
+            background-color: #fbfbfb;
+            padding: 5px 10px;
+            color: #e3594f;
+            font-size: 1.2em
+        }
+        .desc{
+            padding: 5px 10px;
+            display: block;
+            font-size:1.3rem;
+        }
+    }
+    .footer {
+        position: absolute;
+        bottom: 0;
+        z-index: 99;
+        width: 100%;
+        background-color: #fff;
+        .inner{
+            position: relative;
+            width: 100%;
+            min-height: 40px;
+        }
+        textarea {
+            width: 100%;
+            border: 0;
+            margin: 6px;
+            height: 19px;
+            max-height: 120px !important;
+        }
+        .textarea {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            /* padding: 10px; */
+            width: calc(100% - 91px);
+            min-height: 36px;
+            position: relative;
+            float: left;
+            margin: 3px 0;
+            overflow: hidden;
+        }
+        button {
+            position: relative;
+            float: right;
+            right: 0;
+            top: 1px;
+            background: #fff;
+            font-size: 34px;
+            color: #e3594f;
+            width: 45px;
+            top: 4px;
+            &.attach {
+                top: 6px;
+                font-size: 30px;
+                float: left;
+            }
+            &.reply {
+                float: right;
+                position: absolute;
+            }
+        }
+        .ticket-closed {
+            display: flex;
+            height: 40px;
+            font-size: 1.2em;
+            align-items: center;
+            justify-content: center;
+            background-color: #242724;
+            color: #fff;
+        }
+    }
+    .no-chat{
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-align-content: center;
+        -ms-flex-line-pack: center;
+        align-content: center;
+        height: 100%;
+    }
+    .show-chat-img {
+        position: fixed;
+        z-index: 999;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+        // display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #000;
+        a.close-btn {
+            /* width: 20px; */
+            /* height: 20px; */
+            color: #fff;
+            font-size: 3rem;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 99;
+        }
+        img{
+            background-color: #fff;
+            max-width: 400%;
+            max-height: 100%;
+        }
+    }
+}

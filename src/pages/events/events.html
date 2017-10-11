@@ -1,0 +1,71 @@
+<ion-content >
+    <ion-refresher  (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-down"
+      pullingText="Pull to refresh">
+    </ion-refresher-content>
+  </ion-refresher>
+  <!--<h3 class="center text-white">{{ 'events' | translate }}</h3>-->
+  <div class="events-main">
+    <!--<div class="calendar">
+
+    <tan-calendar 
+    [headerBackground]="calendarStyling.headerBackground" 
+    [headerText]="calendarStyling.headerText" 
+    [btnPrimary]="calendarStyling.btnPrimary" 
+    [btnSecondary]="calendarStyling.btnSecondary" 
+    [btnText]="calendarStyling.btnText" 
+    [deactivatePastDate]="calendarStyling.deactivatePastDate"
+    [dateSelected]="departureDate" 
+    [minDateSelection]="minDateSelection" 
+    [dateFormat]="calendarStyling.dateFormat" 
+    (onDateSelect)="dateSelected($event)"></tan-calendar>
+    </div>-->
+    <!--<ion-list *ngFor="let event of eventList">
+      <ion-card tappable (click)="showEventDetails(event.EventID)">
+        <img *ngIf="event.BASE64EVENTIMG" [src]="'data:image/jpeg;base64,'+event.BASE64EVENTIMG"/>
+        <ion-card-content>
+          <ion-card-title>
+            {{event.EVENTNAME}}
+          </ion-card-title>
+          <p>
+            {{event.EVENTDESCRIPTION  | truncate : 150 }}
+          </p>
+        </ion-card-content>
+      </ion-card> 
+    </ion-list>-->
+        <ion-list *ngFor="let event of eventList">
+      <div class="events">
+        <div class="right ntext" tappable (click)="showEventDetails(event.EventID)">
+          <h4>{{event.EVENTNAME}}</h4>
+          <span class="datetime right">{{event.EVENTDATE}}</span>
+        </div>
+        <div class="left nimg"> 
+           <img (click)="showChatImg = true;chatImg = event.RemoteFilePath"  *ngIf="event.RemoteFilePath" [src]="event.RemoteFilePath"   onerror="this.src='assets/images/dummy.jpg';"/>
+           <img (click)="showChatImg = true;chatImg = event.RemoteFilePath"  *ngIf="!event.RemoteFilePath" [src]="'assets/images/dummy.jpg'"/>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </ion-list>
+  </div>
+    <div class="no-news" *ngIf="(eventList && eventList.length <= 0 || !eventList) && !spinner">
+      <img src="assets/icon/not-found.png" alt="">
+      <div>{{'no_events' | translate}}</div>
+    </div>
+<div class="spinner"   *ngIf="spinner"   >
+  <div class="bounce1 red"></div>
+  <div class="bounce2 green"></div>
+  <div class="bounce3 blue"></div>
+  <div class="bounce4 yellow"></div>
+</div>
+        <!--<ion-spinner  *ngIf="spinner" ></ion-spinner>-->
+</ion-content>
+  <div class="show-chat-img" *ngIf="showChatImg">
+    <a class="close-btn" (click)="imgWidth = null;showChatImg = false;">
+      <ion-icon name="close"></ion-icon>
+    </a>
+    <a  (click)="imgWidth = imgWidth == 'auto'?'100vw':'auto'">
+      <img  [ngStyle]="{'width':imgWidth?imgWidth:'100vw'}" [src]="chatImg?chatImg:''" alt="">
+    </a>
+  </div>
+

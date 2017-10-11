@@ -1,0 +1,23 @@
+
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>{{'about' | translate}} {{commonStorage.getItem('appDetails').ApplicationName}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <img class="logo-image" *ngIf="commonStorage.getItem('appDetails')" [src]="'data:image/jpeg;base64,'+commonStorage.getItem('appDetails').Base64ApplicationLogo"/>
+
+  <p >
+    Takamul, meaning open or clear, is sophisticated issue marking system. This is in line with Oman’s vision 2020 expenditure. Smart Takamul enables all the pole of the world to be communicate and share the issues/ problems and help reduce people difficulties as much as possible.
+  </p>
+  <p>
+    Takamul app will enable user to have real time chatting with authorized persons. This can be through image sharing too. We are planning to introduce video chatting in the nearest future.   
+  </p>
+  <ion-fab right bottom >
+    <button ion-fab color="success" (click)="share()" ><ion-icon name="share"></ion-icon></button>
+  </ion-fab>
+</ion-content>

@@ -1,0 +1,48 @@
+<style>
+    tan-calendar {}
+</style>
+<div class="tan-calendar">
+    <div class="row">
+        <div class="col-12 " style="z-index:1000">
+            <div class="Event-calendar" [ngStyle]="{'background-color': headerBackground}">
+                <div class="years clearfix" style="padding-top:5px">
+                    <div class="unit prev" [ngClass]="{'transparent':hidePreviosMonth()}" style="text-align:left;padding-left:10px" (click)="prevMonth()">
+                        <!--<em [ngStyle]="{'color':headerText}"></em>-->
+                        <ion-icon name="arrow-back"></ion-icon>
+                        <!--<i [ngStyle]="{'color':headerText}" class="fa fa-angle-left" aria-hidden="true"></i>-->
+                    </div>
+                    <div class="monyear uppercase" [ngStyle]="{'color':headerText}"><b>{{visibleMonth.monthTxt}} {{visibleMonth.year}}</b></div>
+                    <div class="unit next" style="text-align:right;padding-right:10px" (click)="nextMonth()">
+                        <!--<em></em>-->
+                        <ion-icon name="arrow-forward"></ion-icon>
+                        <!--<i [ngStyle]="{'color':headerText}" class="fa fa-angle-right" aria-hidden="true"></i>-->
+                    </div> 
+                    <div class="clear"></div>
+                    <div class="clearfix WeekDays" >
+                        <div class="unit"  [ngStyle]="{'background-color': headerBackground}" *ngFor="let days of weekDays"><b>{{days }}</b></div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="days">
+                    <div class="clearfix">
+                        <div *ngFor="let w of dates">
+                            <div *ngFor="let d of w" tappable (click)="cellClicked(d)">
+                                <div [ngStyle]="{'background-color': btnPrimary}" [ngClass]="{'unit older': d.cmo===PREV_MONTH, 'unit next-month': d.cmo===NEXT_MONTH, 
+                            'unit': d.cmo===CURR_MONTH || d.cmo!==CURR_MONTH, 
+                            'today': isCurrDay(d.day,d.month,d.year,d.cmo),
+                            'past':isPast(d.day,d.month,d.year,d.cmo),
+                            'selected': isSelectedDay(d.day,d.month,d.year,d.cmo)}">
+
+                                    <!--<b *ngIf=" d.cmo!==CURR_MONTH ">{{d.day}}</b>-->
+                                    <b *ngIf=" d.cmo===CURR_MONTH " [ngStyle]="{'background-color': btnPrimary,'color':btnText}">{{d.day}}</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="divcalendartable"></div>

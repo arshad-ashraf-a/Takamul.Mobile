@@ -1,0 +1,57 @@
+<ion-header  [ngClass]='appData.DIRECTION'>
+
+  <ion-navbar color="primary">
+    <ion-title>{{ 'create_ticket' | translate }}</ion-title> 
+    <ion-buttons start>
+      <button ion-button (click)="dismiss(false)">
+        <span class="bg-primary" showWhen="ios">{{ 'cancel' | translate }}</span>
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding  [ngClass]='appData.DIRECTION'>
+
+  <!--<h3 class="center text-white">{{ 'add_new_ticket' | translate }}</h3>-->
+
+    <div class="tickets-div add-new"  [ngClass]="{'add-new-show':addNew}">
+       <!--<div class="ticket-head">
+          <span class="text">{{ 'add_new_ticket' | translate }}</span>
+          <div class="clear"></div>
+        </div>-->
+      <div class="tickets-add">
+        <div class="add-form"    [formGroup]="addForm" >
+          <ion-item>
+              <input type="text" formControlName="name" placeholder="{{ 'ticket_name' | translate }}" />
+          </ion-item>
+          <ion-item>
+              <textarea formControlName="description" placeholder="{{ 'ticket_description' | translate }}" ></textarea>
+          </ion-item>
+          <ion-item>
+              <span class="file" *ngIf="ext">
+                {{getTypeName(ext)}} {{ 'file_attached' | translate }}
+                <span class="remove" tappable (click)="ext = '';base64 = ''"><ion-icon name="close-circle"></ion-icon></span>
+                </span>
+              <button ion-button color="white" block (click)="presentActionSheet()">
+                {{'attach' | translate}}
+              </button>
+          </ion-item>
+          <button ion-button  color="success" (click)="createTicket(addForm.value)"  [disabled]='!addForm.valid || spinner' round>
+              {{ 'create' | translate }}
+          </button>
+          <button ion-button  color="warning" (click)="dismiss()"   round>
+              {{ 'cancel' | translate }}
+          </button>
+        </div>
+<div class="spinner"   *ngIf="spinner"   >
+  <div class="bounce1 red"></div>
+  <div class="bounce2 green"></div>
+  <div class="bounce3 blue"></div>
+  <div class="bounce4 yellow"></div>
+</div>
+      </div>
+    </div>
+</ion-content>

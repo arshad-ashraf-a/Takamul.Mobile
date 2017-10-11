@@ -1,0 +1,217 @@
+<ion-header #header>
+  <ion-navbar color="primary">
+    <ion-buttons left >
+      <button ion-button color="primary" >
+      <img class="logo-image" *ngIf="commonStorage.getItem('appDetails').RemoteFilePath" [src]="commonStorage.getItem('appDetails').RemoteFilePath"/>
+        <!--<img  src="assets/images/logo.png" alt="" >-->
+      </button>
+    </ion-buttons>
+    <ion-title *ngIf="appData.PAGE=='HOME' || appData.PAGE=='TICKETS' || appData.PAGE=='EVENTS' || appData.PAGE=='NEWS' || appData.PAGE=='ADMIN'">
+      {{commonStorage.getItem('appDetails').ApplicationName}}
+    </ion-title>
+    <ion-buttons end>
+      <!--<button ion-button color="primary" >
+        <img tappable src="assets/icon/language-icon.png" alt="" >
+      </button>-->
+      <button ion-button color="primary" (click)="goToSetting(appData.PAGE)">
+        <img tappable src="assets/icon/settings-icon.png" alt="" >
+      </button>
+      <!--<button ion-button color="primary"  (click)="appData.PAGE = 'HOME'" >
+        <img tappable src="assets/icon/home-icon.png" alt="" >
+      </button>-->
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content [ngClass]="{'keyboard-open':keyboardShow || commonStorage.getItem('appDetails').IsApplicationExpired}">
+  <div  class="home-main" [ngStyle]="{'height':'calc(100vh - ' + headerHeight + 'px - ' + footerHeight + 'px)'}" *ngIf="appData.PAGE=='HOME' && !commonStorage.getItem('appDetails').IsApplicationExpired && !firstTime">
+      <div class="events"  #eventsDiv>
+             <span   class="title">{{ 'events' | translate }}</span>
+       <ion-slides  *ngIf="eventList.length > 0" [initialSlide]="0"  [autoplay]="3000" [loop]="eventList.length > 1" [pager]="true" [dir]="appData.DIRECTION">
+
+        <template ngFor let-event [ngForOf]="eventList" let-i="index">
+          <!--<template *ngIf="i < 5" >-->
+            <ion-slide *ngIf="i < 5" #eventSlide>
+                <div class="slide-div" tappable (click)="showEventDetails(event.EventID)">
+                  <div class="etext right">
+                    <h4 class="truncate">{{event.EVENTNAME}}</h4>
+                    <span class="date">
+                      {{event.EVENTDATE}}
+                    </span>
+                    <p  class="news-content truncate">
+                      {{event.EVENTDESCRIPTION | truncate : 120 }}
+                    </p>
+                  </div>
+                  <div class="eimg left">
+                    <img *ngIf="event.RemoteFilePath" [src]="event.RemoteFilePath"   onerror="this.src='assets/images/dummy.jpg';"/>
+                    <img *ngIf="!event.RemoteFilePath" [src]="'assets/images/dummy.jpg'"/>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+            </ion-slide>
+          <!--</template>-->
+       </template>
+
+        </ion-slides>
+        <div class="no-events"  *ngIf="eventList && eventList.length <= 0" >   
+          {{'no_events' | translate}}
+        </div>
+     </div>
+
+     <div class="tickets" #ticektsDiv [ngStyle]="{'height':'calc(100% - ' + newsDivHeight + 'px - ' + eventsDivHeight + 'px - 10px)'}">
+       <div *ngIf="auth.isLoggedIn() && newsLoaded && eventLoaded" class="ticket-list">
+          <template ngFor let-ticket [ngForOf]="tickets" let-i="index">
+            <div *ngIf="i < 5" class="ticket-item">
+              <div class="icon left" (click)="showChat(ticket.TicketID,ticket.TicketName)">           
+                    <img class="chat-img" [ngClass]="{'show':ticket.imgShow}" *ngIf="ticket.RemoteFilePath" [src]="ticket.RemoteFilePath"   onerror="this.src='assets/images/dummy.jpg';"/>
+                    <img class="chat-img" [ngClass]="{'show':ticket.imgShow}" *ngIf="!ticket.RemoteFilePath" tappable [src]="'assets/icon/language-icon.png'" alt="" >
+              </div>
+              <div class="detail left" tappable (click)="showChat(ticket.TicketID,ticket.TicketName)">
+                <div class="title">{{ticket.TicketName}}</div>
+                <div class="status" [ngClass]="{'closed':ticket.TicketStatusID==2,'rejected':ticket.TicketStatusID==3,'deleted':ticket.TicketStatusID==4}"> <span>{{ticket.TicketStatusID==1?'Open':(ticket.TicketStatusID==2?'closed':(ticket.TicketStatusID==3?'rejected':'Deleted'))}}</span></div>
+                <!--<div class="date">{{ticket.TicketDescription}}</div>-->
+              </div>
+              <!--<div class="right">
+                  <ion-icon name="ios-close-circle-outline"  color="danger" (click)="delete(ticket.TicketID)"></ion-icon>
+                      <ion-icon name="ios-checkmark-circle-outline" tappable color="success" (click)="resolve(ticket.TicketID)"></ion-icon>
+              </div>-->
+              <div class="clear"></div>
+            </div>
+          </template>
+          <div class="no-tickets-found" *ngIf="!tickets || tickets.length <= 0">
+            <span>{{ 'no_tickets_found' | translate }}</span>
+          </div>
+       </div>
+       <div *ngIf="!auth.isLoggedIn() && newsLoaded && eventLoaded" class="need-logged-in">
+          <span>
+            {{ 'you_need_to_login' | translate }}
+          </span>
+       </div>
+     </div>
+
+     <!--<img tappable src="assets/images/logo.png" alt="" >-->
+     <div  class="news-home"  #newsDiv>
+       <div class="relative">
+         <span class="title">{{ 'news' | translate }}</span>
+       <ion-slides  *ngIf="newsList.length > 0" #newsSlide [initialSlide]="0" [autoplay]="3000"   [loop]="newsList.length > 1" [pager]="true"  [dir]="appData.DIRECTION">
+
+        <template ngFor let-news [ngForOf]="newsList" let-i="index">
+            <ion-slide *ngIf="i < 5">
+              <div class="slide-div"  tappable (click)="showDetails(news.NewsID)">
+                <div class="right ntext" >
+                  <h4 class="truncate">{{news.NewsTitle}}</h4>
+                  <span class="date">
+                    {{news.PublishedDate}}
+                  </span>
+                  <p class="news-content">
+                    {{news.NewsContent | truncate : 120 }}
+                  </p>
+                </div>
+                <div class="left nimg">
+                  <img *ngIf="news.RemoteFilePath" [src]="news.RemoteFilePath"  onerror="this.src='assets/images/dummy.jpg';"/>
+                  <img *ngIf="!news.RemoteFilePath" [src]="'assets/images/dummy.jpg'"/>
+                </div>
+                <div class="clear"></div>
+              </div>
+
+            </ion-slide>
+        </template>
+
+        </ion-slides>
+        <div class="no-news"  *ngIf="newsList && newsList.length <= 0" >   
+          {{'no_news' | translate}}
+        </div>
+        <a  class="prev arrow" (click)="newsSlide.slidePrev()">
+            <ion-icon ios="ios-arrow-back" md="ios-arrow-back"></ion-icon>
+        </a>
+        <a  class="next arrow"  (click)="newsSlide.slideNext()">
+            <ion-icon ios="ios-arrow-forward" md="ios-arrow-forward"></ion-icon>
+        </a>
+        </div>
+     </div>
+     
+  </div>
+  <page-admin *ngIf="appData.PAGE=='ADMIN' && !commonStorage.getItem('appDetails').IsApplicationExpired && !firstTime"></page-admin>
+  <page-tickets *ngIf="appData.PAGE=='TICKETS' && !commonStorage.getItem('appDetails').IsApplicationExpired && !firstTime"></page-tickets>
+  <page-events *ngIf="appData.PAGE=='EVENTS' && !commonStorage.getItem('appDetails').IsApplicationExpired && !firstTime"></page-events>
+  <page-news *ngIf="appData.PAGE=='NEWS' && !commonStorage.getItem('appDetails').IsApplicationExpired && !firstTime"></page-news>
+
+  <div class="expired" *ngIf="commonStorage.getItem('appDetails').IsApplicationExpired">
+<span>{{'app_expired' | translate}}</span>
+  </div>
+
+<div class="spinner"   *ngIf="spinner"   >
+  <div class="bounce1 red"></div>
+  <div class="bounce2 green"></div>
+  <div class="bounce3 blue"></div>
+  <div class="bounce4 yellow"></div>
+</div>
+</ion-content>
+<div class="firstime" *ngIf="firstTime">
+  <div class="logo-first">
+      <img class="logo-image" *ngIf="commonStorage.getItem('appDetails').RemoteFilePath" [src]="commonStorage.getItem('appDetails').RemoteFilePath"/>
+  </div>
+  <div class="languages">
+      <button ion-button block color="primary" (click)="selectLanguage(1)">
+        {{'arabic' | translate}}
+      </button>
+      <button ion-button block color="primary" (click)="selectLanguage(2)">
+        {{'english' | translate}}
+      </button>
+  </div>
+</div>
+<ion-footer *ngIf="!keyboardShow && !commonStorage.getItem('appDetails').IsApplicationExpired" #footer> 
+  <div class="tabs-footer">
+    <ion-row>
+      <ion-col width-20>
+        <div class="tab-item-footer" [ngClass]="{'selected':appData.PAGE == 'HOME'}">
+          <div class="absolute" tappable (click)="setPage('HOME');setHeight();loadHomeData();">
+            <div class="relative" >
+              <img  src="assets/icon/home-icon.png" alt="">
+              <span>{{ 'home' | translate }}</span>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col width-20>
+        <div class="tab-item-footer"  [ngClass]="{'selected':appData.PAGE == 'ADMIN'}">
+          <div class="absolute" tappable (click)="setPage('ADMIN')">
+            <div class="relative" >
+              <img  src="assets/icon/admin-icon.png" alt="">
+              <span>{{ 'admin' | translate }}</span>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col width-20>
+        <div class="tab-item-footer" [ngClass]="{'selected':appData.PAGE == 'TICKETS'}">
+          <div class="absolute" tappable (click)="setPage('TICKETS')">
+            <div class="relative" >
+              <img  src="assets/icon/tickets-icon.png" alt="">
+              <span>{{ 'tickets' | translate }}</span>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col width-20>
+        <div class="tab-item-footer" [ngClass]="{'selected':appData.PAGE == 'EVENTS'}">
+          <div class="absolute" tappable (click)="setPage('EVENTS')">
+            <div class="relative" >
+              <img  src="assets/icon/events-icon.png" alt="">
+              <span>{{ 'events' | translate }}</span>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col width-20>
+        <div class="tab-item-footer" [ngClass]="{'selected':appData.PAGE == 'NEWS'}">
+          <div class="absolute" tappable (click)="setPage('NEWS')">
+            <div class="relative" >
+              <img  src="assets/icon/news-icon.png" alt="">
+              <span>{{ 'news' | translate }}</span>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-footer>

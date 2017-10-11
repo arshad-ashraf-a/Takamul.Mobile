@@ -1,0 +1,56 @@
+page-new-chat {
+   
+    .tickets-div {
+        min-height: calc(100vh - 60px - 60px);
+        width: 90vw;
+        margin: auto;
+        background-color: #fdfdfd;
+        border-radius: 5px;
+        text-align: center;
+        padding-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .ticket-head{
+        border-bottom: 1px solid color($colors, primary, base);
+        height: 45px;
+        span.text {
+            font-size: 1.4em;
+            position: relative;
+            top: 12px;
+        }
+    }
+    .add-new{
+        .tickets-add{
+            margin-top: 0px;
+        }
+        .item-inner{
+            border: 0px !important;
+        }
+        .label{
+            margin-top: 10px;
+            input{
+                border: 1px solid #e3594f;
+                width: 100%;
+                padding: 10px;
+                border-radius: 9px;
+            }
+            textarea {
+                border: 1px solid #e3594f;
+                width: 100%;
+                height: 250px;
+                padding: 10px;
+                border-radius: 9px;
+            }
+        }
+    }
+    .file{
+        display: block;
+        background-color: #F5F5F5;
+        padding: 4px;
+        .remove{
+            float: right;
+        }
+    }
+}

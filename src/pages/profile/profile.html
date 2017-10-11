@@ -1,0 +1,50 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>profile</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+<div class="profile" *ngIf="profile">
+  <span class="label">
+    Full name
+  </span>
+  <div class="value">{{profile.FullName}}</div>
+  <span class="label">
+    Email
+  </span>
+  <div class="value">{{profile.Email}}</div>
+  <span class="label">
+    Phone Number
+  </span>
+  <div class="value">{{profile.PhoneNumber}}</div>
+  <span class="label" *ngIf="profile.CivilID">
+    CivilID
+  </span>
+  <div class="value"  *ngIf="profile.CivilID">{{profile.CivilID}}</div>
+  <span class="label">
+    Area Name
+  </span>
+  <div class="value">{{profile.AreaName}}</div>
+  <span class="label" *ngIf="profile.WilayatName">
+    Wilayat Name
+  </span>
+  <div class="value"  *ngIf="profile.WilayatName">{{profile.WilayatName}}</div>
+  <span class="label" *ngIf="profile.VillageName">
+    Village Name
+  </span>
+  <div class="value"  *ngIf="profile.VillageName">{{profile.VillageName}}</div>
+</div>
+
+
+
+<div class="spinner"   *ngIf="spinner"   >
+  <div class="bounce1 red"></div>
+  <div class="bounce2 green"></div>
+  <div class="bounce3 blue"></div>
+  <div class="bounce4 yellow"></div>
+</div>
+</ion-content>

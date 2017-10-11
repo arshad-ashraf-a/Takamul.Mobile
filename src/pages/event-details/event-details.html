@@ -1,0 +1,58 @@
+<ion-header [ngClass]='direction'>
+
+  <ion-navbar color="primary">
+    <ion-title>{{pageTitle}}</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss(false)">
+        <span class="bg-primary" showWhen="ios">{{ 'cancel' | translate }}</span>
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content [ngClass]='direction'> 
+<div class="event-detail" *ngIf="eventDetail">
+  <div class="map">
+    <sebm-google-map [latitude]="lat" [longitude]="lng">
+      <sebm-google-map-marker [latitude]="lat" [longitude]="lng"></sebm-google-map-marker>
+    </sebm-google-map>
+    <a class="open-map" (click)="openMap()">{{ 'open_in_gmap' | translate }}</a>
+  </div>
+  <div class="detail">
+    <div class="img">
+        <img *ngIf="eventDetail.RemoteFilePath" (click)="showChatImg = true;chatImg = eventDetail.RemoteFilePath"  [src]="eventDetail.RemoteFilePath"   onerror="this.src='assets/images/dummy.jpg';"/>
+        <img *ngIf="!eventDetail.RemoteFilePath" (click)="showChatImg = true;chatImg = eventDetail.RemoteFilePath"  [src]="'assets/images/dummy.jpg'"/>
+    </div>
+    <div class="title">
+      <h5>{{eventDetail.EVENTNAME}} ({{eventDetail.EventLocation}})
+        <br><span class="date">{{eventDetail.EVENTDATE}}</span>
+      </h5>
+    </div>
+    <div class="event-body">
+      <p>
+        {{eventDetail.EVENTDESCRIPTION}}
+      </p>
+    </div>
+  </div>
+</div>
+  <ion-fab right bottom *ngIf="eventDetail">
+    <button ion-fab color="success" (click)="share()" ><ion-icon name="share"></ion-icon></button>
+  </ion-fab>
+<div class="spinner"   *ngIf="spinner"   >
+  <div class="bounce1 red"></div>
+  <div class="bounce2 green"></div>
+  <div class="bounce3 blue"></div>
+  <div class="bounce4 yellow"></div>
+</div>
+</ion-content>
+  <div class="show-chat-img" *ngIf="showChatImg">
+    <a class="close-btn" (click)="imgWidth = null;showChatImg = false;">
+      <ion-icon name="close"></ion-icon>
+    </a>
+    <a  (click)="imgWidth = imgWidth == 'auto'?'100vw':'auto'">
+      <img  [ngStyle]="{'width':imgWidth?imgWidth:'100vw'}" [src]="chatImg?chatImg:''" alt="">
+    </a>
+  </div>
